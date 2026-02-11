@@ -66,6 +66,12 @@ lib/
   uploadValidation.ts       → file validation + error message mapping
 ```
 
+## Deploying to Netlify
+
+- **Build command:** `npm run build`
+- **Publish directory:** `.next` (Netlify’s Next.js plugin usually sets this)
+- **E401 “Unable to authenticate” during install:** This repo only uses the public npm registry. If you see E401, open your Netlify site → **Site configuration** → **Environment variables** and **remove** `NPM_TOKEN` and/or `NODE_AUTH_TOKEN` if they are set (an invalid or expired token causes this). Then trigger a new deploy.
+
 ## Key decisions
 
 See [`DECISIONS.md`](./DECISIONS.md) for:
