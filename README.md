@@ -12,6 +12,10 @@ npm run dev
 ## Generate a large sample CSV (optional)
 npm run gen:csv
 
+## Tests (Vitest)
+npm run test        # run once
+npm run test:watch  # watch mode
+
 
 ### `TAKEHOME.md` (the actual prompt you send)
 Use the “bring it all together” prompt we wrote, with repo-specific notes:

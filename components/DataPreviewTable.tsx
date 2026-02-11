@@ -75,6 +75,14 @@ export default function DataPreviewTable() {
     })()
   }, [sessionId])
 
+  const issues = useMemo(
+    () =>
+      data?.preview
+        ? deriveIssues(data.preview.columns, data.preview.rows, data.preview.types)
+        : [],
+    [data]
+  )
+
   if (!sessionId) {
     return (
       <div style={{ padding: 16, background: "#f8f9fa", borderRadius: 8, color: "#444" }}>
@@ -98,7 +106,6 @@ export default function DataPreviewTable() {
   }
 
   const { columns, types, rows } = data.preview
-  const issues = useMemo(() => deriveIssues(columns, rows, types), [columns, rows, types])
   const isWide = columns.length > 15
   const displayRows = rows.slice(0, PREVIEW_ROW_CAP)
   const showColumnsPeek = columns.length > COLUMNS_PEEK
