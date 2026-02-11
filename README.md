@@ -1,38 +1,75 @@
-## Setup
+# Large Upload Take-Home
+
+Chunked CSV upload with data preview — Next.js App Router.
 
 ## Prerequisites
 
-Node.js 18+ (Node 20 recommended)
-npm (included with Node)
+- Node.js 18+ (Node 20 recommended)
+- npm (included with Node)
 
-node -v
+## Setup
+
+```bash
 npm install
 npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) — you'll land on the Upload page.
 
 ## Generate a large sample CSV (optional)
+
+```bash
 npm run gen:csv
+```
+
+Creates `public/sample-large.csv` (~10 MB) for testing chunked uploads.
 
 ## Tests (Vitest)
-npm run test        # run once
-npm run test:watch  # watch mode
 
+```bash
+npm run test          # run once
+npm run test:watch    # watch mode
+```
 
-### `TAKEHOME.md` (the actual prompt you send)
-Use the “bring it all together” prompt we wrote, with repo-specific notes:
+**Test suites:**
 
-- chunking baseline exists in `hooks/useChunkedUpload.ts`
-- local API routes in `app/api/upload/*`
+| File | What it tests |
+|------|---------------|
+| `hooks/uploadReducer.test.ts` | State machine transitions (idle → uploading → finalizing → done/error/canceled) |
+| `lib/csv.test.ts` | CSV parsing, type inference, quoted fields, CRLF |
+| `lib/uploadValidation.test.ts` | File validation (type, size, empty) and user-facing error messages |
+| `components/UploadWizard.test.tsx` | Phase stepper, file selection, validation display, upload trigger |
+| `components/DataPreviewTable.test.tsx` | No-session fallback, fetch + render preview with columns/rows |
+| `app/api/upload/upload.integration.test.ts` | Full API flow: init → chunk → finalize → GET preview |
 
-(If you want, I’ll paste a polished `TAKEHOME.md` version tailored to this exact repo layout.)
+## Project structure
 
----
+```
+app/
+  page.tsx                  → redirects to /upload
+  upload/page.tsx           → upload page (UploadWizard)
+  preview/page.tsx          → data preview page (DataPreviewTable)
+  api/upload/
+    init/route.ts           → POST: create session
+    chunk/route.ts          → POST: receive a chunk
+    finalize/route.ts       → POST: assemble + preview; GET: fetch preview
+components/
+  UploadWizard.tsx          → upload flow UI (phases, progress, errors)
+  DataPreviewTable.tsx      → data preview (summary, issues, table)
+hooks/
+  useChunkedUpload.ts       → upload hook (chunking, retry, cancel)
+  uploadReducer.ts          → upload state machine (discriminated union)
+lib/
+  csv.ts                    → CSV parser + type inference
+  storage.ts                → file system helpers for chunks
+  types.ts                  → shared TypeScript types
+  uploadValidation.ts       → file validation + error message mapping
+```
 
-## What to seed as “known issues” 
-This starter already includes a couple:
-- progress is based on **chunk count**, not bytes
-- sequential uploads only
-- no resumability
-- minimal error UX
+## Key decisions
 
-
-
+See [`DECISIONS.md`](./DECISIONS.md) for:
+- What was changed and why
+- What was intentionally not done
+- Tradeoffs
+- Backend asks

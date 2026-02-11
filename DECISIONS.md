@@ -63,9 +63,6 @@
 - **Pause**  
   We have cancel (abort). True pause/resume would need resumable uploads and more state; skipped.
 
-- **Unit tests**  
-  Marked optional in the prompt; focused on behavior and documentation. Tests would be the next step in a real PR.
-
 - **Heavy UI polish**  
   Kept styling minimal and functional (borders, spacing, clear hierarchy) to stay within the timebox while keeping the flow clear.
 
