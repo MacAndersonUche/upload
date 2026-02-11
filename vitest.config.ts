@@ -14,11 +14,6 @@ export default defineConfig({
       reporter: ["text", "json-summary"],
       exclude: ["node_modules/", "vitest.setup.ts", "**/*.test.*", ".next/"],
     },
-    resolve: {
-      alias: {
-        "@": path.resolve(__dirname, "."),
-      },
-    },
   },
   resolve: {
     alias: {
