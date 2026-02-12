@@ -2,6 +2,8 @@
 
 Chunked CSV upload with data preview — Next.js App Router.
 
+**Live:** [https://decibel-upload.netlify.app/upload](https://decibel-upload.netlify.app/upload)
+
 ## Prerequisites
 
 - Node.js 18+ (Node 20 recommended)
