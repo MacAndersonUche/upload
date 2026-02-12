@@ -1,8 +1,15 @@
 import fs from "fs/promises"
 import path from "path"
 
+// Netlify/Lambda: filesystem is read-only except /tmp (skip when running netlify dev locally)
+const isServerless =
+  !process.env.NETLIFY_DEV &&
+  (typeof process.env.AWS_LAMBDA_FUNCTION_NAME === "string" ||
+    process.env.NETLIFY === "true")
+
 export const DATA_DIR =
-  process.env.UPLOAD_DATA_DIR ?? path.join(process.cwd(), ".data")
+  process.env.UPLOAD_DATA_DIR ??
+  (isServerless ? "/tmp/upload-data" : path.join(process.cwd(), ".data"))
 
 export async function ensureDir(p: string) {
   await fs.mkdir(p, { recursive: true })
