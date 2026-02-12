@@ -2,12 +2,17 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen } from "@testing-library/react"
 import DataPreviewTable from "./DataPreviewTable"
 
-const originalLocation = window.location
+// Mock next/navigation's useSearchParams
+const mockSearchParams = new URLSearchParams()
+vi.mock("next/navigation", () => ({
+  useSearchParams: () => mockSearchParams,
+}))
+
 beforeEach(() => {
-  Object.defineProperty(window, "location", {
-    value: { ...originalLocation, search: "" },
-    writable: true,
-  })
+  // Reset to empty search params before each test
+  for (const key of [...mockSearchParams.keys()]) {
+    mockSearchParams.delete(key)
+  }
 })
 
 describe("DataPreviewTable", () => {
@@ -19,10 +24,7 @@ describe("DataPreviewTable", () => {
   })
 
   it("fetches and displays preview when sessionId is present", async () => {
-    Object.defineProperty(window, "location", {
-      value: { search: "?sessionId=test-session" },
-      writable: true,
-    })
+    mockSearchParams.set("sessionId", "test-session")
 
     global.fetch = vi.fn(() =>
       Promise.resolve(

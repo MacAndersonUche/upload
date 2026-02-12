@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import type { PreviewResponse } from "@/lib/types"
 
 const FRIENDLY_TYPE: Record<string, string> = {
@@ -54,11 +55,8 @@ export default function DataPreviewTable() {
   const [data, setData] = useState<PreviewResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const sessionId = useMemo(() => {
-    if (typeof window === "undefined") return null
-    const sp = new URLSearchParams(window.location.search)
-    return sp.get("sessionId")
-  }, [])
+  const searchParams = useSearchParams()
+  const sessionId = searchParams.get("sessionId")
 
   useEffect(() => {
     if (!sessionId) return
