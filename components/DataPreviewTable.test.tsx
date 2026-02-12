@@ -1,6 +1,8 @@
+/// <reference types="@testing-library/jest-dom/vitest" />
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen } from "@testing-library/react"
 import DataPreviewTable from "./DataPreviewTable"
+import React from "react"
 
 // Mock next/navigation's useSearchParams
 const mockSearchParams = new URLSearchParams()
@@ -53,6 +55,7 @@ describe("DataPreviewTable", () => {
         const text = el?.textContent ?? ""
         return text.startsWith("Your file has") && text.includes("2 row") && text.includes("2 column")
       },
+      {},
       { timeout: 2000 }
     )
     expect(summaries.length).toBeGreaterThanOrEqual(1)
